@@ -16,6 +16,7 @@ scrollFrame.Position = UDim2.new(0.15, 0, 0.15, 0) -- Adjust the position if nee
 scrollFrame.BackgroundTransparency = 0.7 -- Set the transparency to 0.7
 scrollFrame.ScrollBarImageTransparency = 0.8
 scrollFrame.Parent = frame
+scrollFrame.BackgroundColor3 = Color3.new(1, 1, 1)
 
 -- Create a transparent TextBox inside the scrolling frame
 local textBox = Instance.new("TextBox")
