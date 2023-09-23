@@ -1,6 +1,6 @@
 -- Create a ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+screenGui.Parent = game:GetService("CoreGui")
 
 -- Create a semi-transparent frame
 local frame = Instance.new("Frame")
@@ -8,6 +8,29 @@ frame.Size = UDim2.new(1, 0, 1, 0)
 frame.BackgroundTransparency = 0.5
 frame.BackgroundColor3 = Color3.new(0, 0, 0) -- Black background
 frame.Parent = screenGui
+frame.ZIndex = 101
+
+-- Create a variable to track the visibility state of the frame
+local frameVisible = true
+
+-- Create a function to toggle the visibility of the frame
+local function toggleFrameVisibility()
+    frame.Visible = not frameVisible
+    frameVisible = not frameVisible
+end
+
+-- Create a TextButton named "Hide n Open"
+local hideNOpenButton = Instance.new("TextButton")
+hideNOpenButton.Text = "Hide n Open (executor)"
+hideNOpenButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+hideNOpenButton.Position = UDim2.new(0.0, 0, 0.8, 0) -- Adjust position here
+hideNOpenButton.Parent = screenGui
+hideNOpenButton.ZIndex = 200
+
+-- Bind the "Hide n Open" button click event to toggle frame visibility
+hideNOpenButton.MouseButton1Click:Connect(function()
+    toggleFrameVisibility()
+end)
 
 -- Create a smaller scrolling frame to hold the TextBox
 local scrollFrame = Instance.new("ScrollingFrame")
@@ -17,6 +40,7 @@ scrollFrame.BackgroundTransparency = 0.7 -- Set the transparency to 0.7
 scrollFrame.ScrollBarImageTransparency = 0.8
 scrollFrame.Parent = frame
 scrollFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+scrollFrame.ZIndex = 102
 
 -- Create a transparent TextBox inside the scrolling frame
 local textBox = Instance.new("TextBox")
@@ -29,12 +53,14 @@ textBox.TextWrapped = true
 textBox.MultiLine = true
 textBox.TextYAlignment = Enum.TextYAlignment.Top -- Align text to the top
 textBox.Parent = scrollFrame
+textBox.ZIndex = 102
 
 -- Create a TextButton to copy the TextBox content
 local copyButton = Instance.new("TextButton")
 copyButton.Text = "Copy"
 copyButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Adjust the size here
 copyButton.Position = UDim2.new(0.1, 0, 0.9, 0) -- Position on the left of the Paste button
+copyButton.ZIndex = 102
 copyButton.MouseButton1Click:Connect(function()
     local text = textBox.Text
     setclipboard(text)
@@ -46,6 +72,7 @@ local pasteButton = Instance.new("TextButton")
 pasteButton.Text = "Paste"
 pasteButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Adjust the size here
 pasteButton.Position = UDim2.new(0.25, 0, 0.9, 0) -- Position on the left of the Clear button
+pasteButton.ZIndex = 102
 pasteButton.MouseButton1Click:Connect(function()
     local text = getclipboard()
     if text then
@@ -61,6 +88,7 @@ local executeButton = Instance.new("TextButton")
 executeButton.Text = "Execute"
 executeButton.Size = UDim2.new(0.2, 0, 0.1, 0) -- Adjust the size here
 executeButton.Position = UDim2.new(0.75, 0, 0.9, 0) -- Move to the right
+executeButton.ZIndex = 102
 executeButton.MouseButton1Click:Connect(function()
     local codeToExecute = textBox.Text
     local success, result = pcall(loadstring(codeToExecute))
@@ -79,6 +107,7 @@ local executeClipboardButton = Instance.new("TextButton")
 executeClipboardButton.Text = "Execute Clipboard"
 executeClipboardButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Adjust the size here to match other buttons
 executeClipboardButton.Position = UDim2.new(0.4, 0, 0.9, 0) -- Position between Clear and Execute buttons
+executeClipboardButton.ZIndex = 102
 executeClipboardButton.MouseButton1Click:Connect(function()
     -- Get the Lua code from the clipboard
     local clipboardText = getclipboard()
@@ -104,6 +133,7 @@ local clearButton = Instance.new("TextButton")
 clearButton.Text = "Clear"
 clearButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Adjust the size here
 clearButton.Position = UDim2.new(0.55, 0, 0.9, 0) -- Position on the left of the Execute Clipboard button
+clearButton.ZIndex = 102
 clearButton.MouseButton1Click:Connect(function()
     textBox.Text = "" -- Clear the text inside the TextBox
 end)
@@ -115,6 +145,7 @@ closeButton.Name = "X"
 closeButton.Text = "X"
 closeButton.Size = UDim2.new(0.07, 0, 0.07, 0) -- Adjust the size here
 closeButton.Position = UDim2.new(0.9, 0, 0.05, 0)
+closeButton.ZIndex = 102
 closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
