@@ -34,8 +34,8 @@ end)
 
 -- Create a smaller scrolling frame to hold the TextBox
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(0.7, 0, 0.7, 0) -- Adjust the size here
-scrollFrame.Position = UDim2.new(0.15, 0, 0.15, 0) -- Adjust the position if needed
+scrollFrame.Size = UDim2.new(0.7, 0, 0.3, 0) -- Increase the second value (height) to make it taller
+scrollFrame.Position = UDim2.new(0.15, 0, 0.05, 0) -- You can adjust the position as needed
 scrollFrame.BackgroundTransparency = 0.7 -- Set the transparency to 0.7
 scrollFrame.ScrollBarImageTransparency = 0.8
 scrollFrame.Parent = frame
@@ -46,14 +46,28 @@ scrollFrame.ZIndex = 102
 local textBox = Instance.new("TextBox")
 textBox.Size = UDim2.new(1, 0, 1, 0)
 textBox.BackgroundTransparency = 1
-textBox.ClearTextOnFocus = false -- Prevent text from disappearing
-textBox.Text = "-- Enter your Lua code here...\n\nprint('Hello, World!')" -- Example Lua code
-textBox.TextSize = 20 -- Adjust text size as needed
+textBox.ClearTextOnFocus = false
+textBox.Text = "-- Enter your Lua code here...\n\nprint('Hello, World!')"
+textBox.TextSize = 20
 textBox.TextWrapped = true
 textBox.MultiLine = true
-textBox.TextYAlignment = Enum.TextYAlignment.Top -- Align text to the top
+textBox.TextYAlignment = Enum.TextYAlignment.Top
 textBox.Parent = scrollFrame
 textBox.ZIndex = 102
+
+-- Function to update the CanvasSize based on the TextBox's text height
+local function updateCanvasSize()
+    local textHeight = textBox.TextBounds.Y -- Calculate the height of the text
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, textHeight)
+end
+
+-- Connect the updateCanvasSize function to the TextBox's TextChanged event
+textBox:GetPropertyChangedSignal("Text"):Connect(updateCanvasSize)
+
+-- Initial update of the CanvasSize
+updateCanvasSize()
+
+
 
 -- Create a TextButton to copy the TextBox content
 local copyButton = Instance.new("TextButton")
@@ -138,6 +152,8 @@ clearButton.MouseButton1Click:Connect(function()
     textBox.Text = "" -- Clear the text inside the TextBox
 end)
 clearButton.Parent = frame
+
+
 
 -- Create a smaller TextButton to close the ScreenGui
 local closeButton = Instance.new("TextButton")
